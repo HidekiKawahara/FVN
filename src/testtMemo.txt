@@ -1,0 +1,136 @@
+>> output = generateSparseFVNset(fs, 0.01, 1234, 1, 1)
+
+output = 
+
+  フィールドをもつ struct:
+
+                   xFVN: [8192×1 double]
+               timeAxis: [8192×1 double]
+          frequencyAxis: [8192×1 double]
+             mixedPhase: [8192×1 double]
+       frequencySegment: 20
+    normalizedBandwidth: 40
+                   fftl: 8192
+      samplingFrequency: 44100
+                 fvnSet: [8192×16 double]
+                 sigmaT: 0.0100
+       totalElapsedTime: 6.3262
+
+>> load fvnMin10ms.mat
+>> output = generateSparseFVNset(fs, 0.01)
+Please use contents of output.
+
+output = 
+
+  フィールドをもつ struct:
+
+                   xFVN: [8192×1 double]
+               timeAxis: [8192×1 double]
+          frequencyAxis: [8192×1 double]
+             mixedPhase: [8192×1 double]
+       frequencySegment: 20
+    normalizedBandwidth: 40
+                   fftl: 8192
+      samplingFrequency: 44100
+                 fvnSet: [8192×16 double]
+                 sigmaT: 0.0100
+       totalElapsedTime: 5.9587
+
+>> ggg = fvnMin10ms - output.fvnSet;
+>> max(abs(ggg(:)))
+
+ans =
+
+     0
+
+>> output = generateSparseFVNset(fs, 0.025, 1234, 1, 1)
+
+output = 
+
+  フィールドをもつ struct:
+
+                   xFVN: [32768×1 double]
+               timeAxis: [32768×1 double]
+          frequencyAxis: [32768×1 double]
+             mixedPhase: [32768×1 double]
+       frequencySegment: 8
+    normalizedBandwidth: 16
+                   fftl: 32768
+      samplingFrequency: 44100
+                 fvnSet: [32768×16 double]
+                 sigmaT: 0.0250
+       totalElapsedTime: 20.5781
+
+>> output = generateSparseFVNset(fs, 0.05, 1234, 1, 1)
+
+output = 
+
+  フィールドをもつ struct:
+
+                   xFVN: [65536×1 double]
+               timeAxis: [65536×1 double]
+          frequencyAxis: [65536×1 double]
+             mixedPhase: [65536×1 double]
+       frequencySegment: 4
+    normalizedBandwidth: 8
+                   fftl: 65536
+      samplingFrequency: 44100
+                 fvnSet: [65536×16 double]
+                 sigmaT: 0.0500
+       totalElapsedTime: 38.5430
+
+>> output = generateSparseFVNset(fs, 0.1, 1234, 1, 1)
+
+output = 
+
+  フィールドをもつ struct:
+
+                   xFVN: [131072×1 double]
+               timeAxis: [131072×1 double]
+          frequencyAxis: [131072×1 double]
+             mixedPhase: [131072×1 double]
+       frequencySegment: 2
+    normalizedBandwidth: 4
+                   fftl: 131072
+      samplingFrequency: 44100
+                 fvnSet: [131072×16 double]
+                 sigmaT: 0.1000
+       totalElapsedTime: 93.2779
+
+>> output = generateSparseFVNset(fs, 0.2, 1234, 1, 1)
+
+output = 
+
+  フィールドをもつ struct:
+
+                   xFVN: [262144×1 double]
+               timeAxis: [262144×1 double]
+          frequencyAxis: [262144×1 double]
+             mixedPhase: [262144×1 double]
+       frequencySegment: 1
+    normalizedBandwidth: 2
+                   fftl: 262144
+      samplingFrequency: 44100
+                 fvnSet: [262144×16 double]
+                 sigmaT: 0.2000
+       totalElapsedTime: 251.7953
+
+>> output = generateSparseFVNset(fs, 0.4, 1234, 1, 1)
+
+output = 
+
+  フィールドをもつ struct:
+
+                   xFVN: [524288×1 double]
+               timeAxis: [524288×1 double]
+          frequencyAxis: [524288×1 double]
+             mixedPhase: [524288×1 double]
+       frequencySegment: 0.5000
+    normalizedBandwidth: 1
+                   fftl: 524288
+      samplingFrequency: 44100
+                 fvnSet: [524288×16 double]
+                 sigmaT: 0.4000
+       totalElapsedTime: 555.2277
+
+>> 
