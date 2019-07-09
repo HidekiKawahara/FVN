@@ -1,12 +1,12 @@
 # FVN
 Frequency domain variants of Velvet Noise
 
-##Introduction
+## Introduction
 
 This repository consists of tools and underlying elementary functions for acoustic mesaurements 
 using a new set of test signals based on FVNs.
 
-##Installation
+## Installation
 
 Decompress the archive. Then, set MATLAB paths to src, test, and GUI folders. First, try the following command in the command window.
 
@@ -16,7 +16,7 @@ Before passing twenty seconds (usually less than ten seconds...), the following 
 
     'Passed (generateStandardFVN, generateFVN6real, generateSparseFVNset)'
 
-##Getting started (Quick start)
+## Getting started (Quick start)
 
 If your PC has access to a mic and a loudspeaker (usually builtin), try the following command.
 
@@ -62,7 +62,7 @@ It also output the following in the command window.
 
 This is also the contents of the structured variable "output."
 
-##Directories
+## Directories
 
 * src
   * MATLAB source of core functions and supporting files
@@ -73,7 +73,7 @@ This is also the contents of the structured variable "output."
 * doc
  * Technical documents and links to multimedia
 
-##Technical details
+## Technical details
 A unit FVN is an impulse response of an all-pass filter generated from two sets of random numbers.
 By convolving an FVN with the time-reversed version of itself yields a unit impulse.
 An FVN has a localized envelope on the time axis.
@@ -82,7 +82,7 @@ appropriate for acoustic measurements.
 
 Please check the references for details
 
-##References
+## References
 
 1. Kawahara, H., Sakakibara, K. I., Morise, M., Banno, H., Toda, T., & Irino, T. (2018). Frequency domain variants of velvet noise and their application to speech processing and synthesis: with appendices. arXiv preprint arXiv:1806.06812.
 2. Kawahara, H., Sakakibara, K., Morise, M., Banno, H., Toda, T., Irino, T. (2018) Frequency Domain Variants of Velvet Noise and Their Application to Speech Processing and Synthesis. Proc. Interspeech 2018, 2027-2031, DOI: 10.21437/Interspeech.2018-43.
