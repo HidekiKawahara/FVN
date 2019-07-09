@@ -69,7 +69,7 @@ This is also the contents of the structured variable "output."
 * test
   * test script and functions 
 * GUI
- * GUI applications 
+ *  GUI applications 
 * doc
  * Technical documents and links to multimedia
 
