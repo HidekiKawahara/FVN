@@ -126,7 +126,7 @@ switch nargin
         spl = varargin{3};
         exmode = varargin{4};
     otherwise
-        help allInOneFVNtest
+        help allInOneFVNmeasurement
         output.errorMessage = 'Please check how to use this.';
         return;
 end
