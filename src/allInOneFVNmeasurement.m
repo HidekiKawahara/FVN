@@ -37,6 +37,7 @@ function output = allInOneFVNmeasurement(memoText, varargin)
 %                         signalRange: indecies of start and end
 %                     backgroundRange: indecies of start and end
 %                   samplingFrequency: double (Hz)
+%                     modeOfOperation: text string
 %                        creationDate: text string
 %                      levelStructure: structure with calibration info.
 %                         elapsedTime: double (s)
@@ -196,10 +197,27 @@ switch exmode
     case 'calibration'
         endPoint = fftlFVN / 2 + nto * 8 * signPeriod(n_mix);
         selector = fftlFVN / 4:endPoint;
-        disp(['Test signal plays ' num2str(length(selector) / fs, '%5.0f') ' secondes.']);
+        disp(['Test signal plays ' num2str(length(selector) / fs + 2, '%5.0f') ' seconds.']);
         disp(['Adjust the test signal level to ' num2str(spl) ' dB at the microphone']);
         player = audioplayer([pinkBuffer(selector) pinkBuffer(selector) * 0] / max(abs(pinkBuffer)) * 0.8, fs);
-        playblocking(player);
+        %playblocking(player);
+        recObj = audiorecorder(fs, 24, 1);
+        record(recObj);
+        pause(0.5);
+        play(player);
+        while strcmp(get(player, 'runnin'), 'on')
+            pause(0.5);
+        end
+        pause(1);
+        xrecord = getaudiodata(recObj);
+        stop(recObj);
+        if max(abs(xrecord)) > 0.9
+            disp(['Reduce the mic sensitivity. MaxValue:' num2str(max(abs(xrecord)))]);
+        elseif max(abs(xrecord)) < 0.1
+            disp(['Increase the mic sensitivity. MaxValue:' num2str(max(abs(xrecord)))]);
+        else
+            disp(['OK! MaxValue:' num2str(max(abs(xrecord)))])
+        end
         output.buffer = buffer;
         output.pinkBuffer = pinkBuffer;
         return;
@@ -362,6 +380,7 @@ output.soundPressureLevel = spl;
 output.signalRange = biasIdx - 100 + signPeriod(n_mix) * 3 + [1 lresp];
 output.backgroundRange = silIdx - 100 + signPeriod(n_mix) * 3 + [1 lresp];
 output.samplingFrequency = fs;
+output.modeOfOperation = exmode;
 output.creationDate = datestr(now);
 output.levelStructure = levelStr;
 output.elapsedTime = toc(start_tic);

@@ -1,8 +1,8 @@
 function output = oneThirdSpecDisplayForFVN(x, fs, spl, varargin)
 % display A-weighted sound pressure level and spectral analysis
-%   oneThirdSpecDisplayForFVN(x, fs, spl)
-%   oneThirdSpecDisplayForFVN(x, fs, spl, displayOn)
-%   oneThirdSpecDisplayForFVN(x, fs, spl, displayOn, msgText)
+%   output = oneThirdSpecDisplayForFVN(x, fs, spl)
+%   output = oneThirdSpecDisplayForFVN(x, fs, spl, displayOn)
+%   output = oneThirdSpecDisplayForFVN(x, fs, spl, displayOn, msgText)
 % Argument
 %   x          : double 1-d vector, signal
 %   fs         : sampling frequency (Hz)
@@ -64,7 +64,7 @@ th_level = (max(levelStr.fast) + bgLevel) / 2;
 signalOn = levelStr.fast > th_level;
 onSetLoc = min(t_axis(signalOn > signalOn([1 1:end - 1])));
 offSetLoc = max(t_axis(signalOn < signalOn([1 1:end - 1])));
-sigLevel = mean(levelStr.fast(t_axis > onSetLoc + 0.3 & t_axis < offSetLoc - 0.3));
+sigLevel = mean(levelStr.fast(t_axis > onSetLoc + 1 & t_axis < offSetLoc - 1));
 calibrationFactor = spl - sigLevel;
 %---- time course
 if displayOn

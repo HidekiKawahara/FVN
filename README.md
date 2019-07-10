@@ -62,15 +62,19 @@ It also output the following in the command window.
 
 This is also the contents of the structured variable "output."
 
+### Technical document
+
+I placed a Japanese technical document in /doc/ folder. English and updated documents will be added by 15 July, 2019.
+
 ## Directories
 
 * src
   * MATLAB source of core functions and supporting files
 * test
   * test script and functions 
-* GUI
+* GUI 
  *  GUI applications 
-* doc
+* doc 
  * Technical documents and links to multimedia
 
 ## Technical details
@@ -84,8 +88,11 @@ Please check the references for details
 
 ## References
 
-1. Kawahara, H., Sakakibara, K. I., Morise, M., Banno, H., Toda, T., & Irino, T. (2018). Frequency domain variants of velvet noise and their application to speech processing and synthesis: with appendices. arXiv preprint arXiv:1806.06812.
-2. Kawahara, H., Sakakibara, K., Morise, M., Banno, H., Toda, T., Irino, T. (2018) Frequency Domain Variants of Velvet Noise and Their Application to Speech Processing and Synthesis. Proc. Interspeech 2018, 2027-2031, DOI: 10.21437/Interspeech.2018-43.
+1. 河原英紀, 榊原健一, & 水町光徳. (2019). 周波数領域 velvet noise を用いた音響計測手順の拡張について (応用音響). 電子情報通信学会技術研究報告= IEICE technical report: 信学技報, 119(115), 77-82.
+1. Kawahara, H., Sakakibara, K. I., Morise, M., Banno, H., Toda, T., & Irino, T. (2018). Frequency domain variants of velvet noise and their application to speech processing and synthesis: with appendices. arXiv preprint arXiv:1806.06812.  [link to arXiV][FVN arxiv1]
+[FVN arxiv1]:https://arxiv.org/abs/1806.06812
+2. Kawahara, H., Sakakibara, K., Morise, M., Banno, H., Toda, T., Irino, T. (2018) Frequency Domain Variants of Velvet Noise and Their Application to Speech Processing and Synthesis. Proc. Interspeech 2018, 2027-2031, DOI: 10.21437/Interspeech.2018-43.  [link to ISCA archive][FVN isca1]
+[FVN isca1]:https://www.isca-speech.org/archive/Interspeech_2018/abstracts/0043.html
 3. 河原英紀, 森勢将雅, & 水町光徳. (2018). 周波数領域 velvet noise とパワースペクトルの静的表現を用いた音響計測の可能性について (応用音響). 電子情報通信学会技術研究報告= IEICE technical report: 信学技報, 118(190), 89-96.
 
 ***
