@@ -89,7 +89,8 @@ aWeightBase = aWeightTable(:,2);
 %
 fftl = 4096;
 fx = (0:fftl-1)'/fftl*fs;
-tmpGain = interp1(fxBase,aWeightBase-10*log10(fxBase/1000),fx,'linear','extrap');
+%tmpGain = interp1(fxBase,aWeightBase-10*log10(fxBase/1000),fx,'linear','extrap');
+tmpGain = interp1(fxBase,aWeightBase,fx,'linear','extrap');
 tmpAmp = 10.0.^(tmpGain/20);
 tmpAmp(fftl/2+1:fftl) = tmpAmp(fftl/2+1:-1:2);
 aWeightFirTmp = fftshift(real(ifft(tmpAmp)));
