@@ -190,6 +190,7 @@ for ii = 1:n_mix
         buffer(nHead + base_idx) = buffer(nHead + base_idx) + xFVN * signMat(jj, ii);
         nHead = nHead + nto;
     end
+    nEnd = nHead + nto + base_idx(end);
 end
 pinkBuffer = filter(1, a, buffer);
 %dataLength = length(pinkBuffer) / fs;
@@ -222,8 +223,11 @@ switch exmode
         output.pinkBuffer = pinkBuffer;
         return;
     case 'measurement'
-        disp(['Measurement starts. Be quiet for ' num2str((length(buffer) * 1.1) / fs, '%5.0f') ' seconds. Please.']);
-        player = audioplayer([pinkBuffer pinkBuffer * 0] / max(abs(pinkBuffer)) * 0.8, fs);
+        endPoint = nEnd;%fftlFVN / 2 + nto * 8 * signPeriod(n_mix) + fs;
+        %disp(['Measurement starts. Be quiet for ' num2str((length(buffer) * 1.1) / fs, '%5.0f') ' seconds. Please.']);
+        disp(['Measurement starts. Be quiet for ' num2str(endPoint / fs, '%5.0f') ' seconds. Please.']);
+        %player = audioplayer([pinkBuffer pinkBuffer * 0] / max(abs(pinkBuffer)) * 0.8, fs);
+        player = audioplayer(pinkBuffer(1:nEnd) / max(abs(pinkBuffer)) * 0.8, fs);
         recObj = audiorecorder(fs, 24, 1);
         record(recObj);
         pause(1);
@@ -244,7 +248,7 @@ switch exmode
         while strcmp(get(player, 'runnin'), 'on')
             pause(0.5);
         end
-        pause(2);
+        pause(1);
         xrecord = getaudiodata(recObj);
         stop(recObj);
     case 'diagnosis'
@@ -290,16 +294,24 @@ tmpIdx = 1:lresp;
 indivResp = zeros(lresp, n_mix);
 indivSil = zeros(lresp, n_mix);
 indivRef = zeros(lresp, n_mix);
+copiedSilent = xr * 0;
+xsilSegment = xr(1: fs);
+for jj = 1:fs:length(xr) - fs
+    copiedSilent((jj - 1) + (1:fs)) = xsilSegment;
+end
 for jj = 1:n_mix
     tmpResp = fftfilt(fvnSet(end:-1:1, jj), xr) * cf;
+    tmpRespSil = fftfilt(fvnSet(end:-1:1, jj), copiedSilent) * cf;
     avResp = zeros(lresp, 1);
     avSil = zeros(lresp, 1);
     avRef = zeros(lresp, 1);
     for ii = signPeriod(n_mix) * 3 + 1:signPeriod(n_mix) * 5
         avResp = avResp + ...
             tmpResp(biasIdx - 100 + tmpIdx + (ii - 1) * nto, 1) * signMat(ii, jj);
+%        avSil = avSil + ...
+%            tmpResp(silIdx - 100 + tmpIdx + (ii - 1) * nto, 1) * signMat(ii, jj);
         avSil = avSil + ...
-            tmpResp(silIdx - 100 + tmpIdx + (ii - 1) * nto, 1) * signMat(ii, jj);
+            tmpRespSil(biasIdx - 100 + tmpIdx + (ii - 1) * nto, 1) * signMat(ii, jj);
         switch exmode
             case 'measurement2ch'
                 avRef = avRef + ...
