@@ -62,9 +62,17 @@ It also output the following in the command window.
 
 This is also the contents of the structured variable "output."
 
+##  New! GUI application for stereo acoustic measurement in real-time (19/August/2019)
+
+Refer to the Japanese document on the command
+```
+standingWvViewer
+```
+
+
 ### Technical document
 
-I placed a Japanese technical document in /doc/ folder. English and updated documents will be added by 15 July, 2019.
+I placed a Japanese technical document in /doc/ folder. English and updated documents will be added by  31 August, 2019. (Sorry for delay)
 
 ## Directories
 

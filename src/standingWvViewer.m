@@ -22,7 +22,7 @@ function varargout = standingWvViewer(varargin)
 
 % Edit the above text to modify the response to help standingWvViewer
 
-% Last Modified by GUIDE v2.5 27-Jul-2019 00:37:32
+% Last Modified by GUIDE v2.5 18-Aug-2019 16:37:50
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -67,6 +67,7 @@ guidata(hObject, handles);
 play(handles.player1);
 record(handles.recorder1);
 set(handles.startButton, 'enable', 'off');
+set(handles.reportButton, 'enable', 'off');
 set(handles.stopButton, 'enable', 'on');
 set(handles.radiobutton70, 'enable', 'on', 'value', 0);
 set(handles.radiobutton75, 'enable', 'on', 'value', 0);
@@ -155,7 +156,7 @@ pw2Harmonics = interp1(fx, cumpw2, fxHarmonics + fo / 2) - interp1(fx, cumpw2, f
 pw3Harmonics = interp1(fx, cumpw3, fxHarmonics + fo / 2) - interp1(fx, cumpw3, fxHarmonics - fo / 2);
 handles.lchSpectrumHandle = plot(fxHarmonics, 10 * log10(pw1Harmonics), 'linewidth', 2);
 hold all
-handles.rchSpectrumHandle = plot(fxHarmonics, 10 * log10(pw2Harmonics), 'linewidth', 2);
+handles.rchSpectrumHandle = plot(fxHarmonics - fo / 2, 10 * log10(pw2Harmonics), 'linewidth', 2);
 handles.errSpectrumHandle = plot(fxHarmonics, 10 * log10(pw3Harmonics), 'linewidth', 2);
 grid on;
 %max(abs(x3))
@@ -199,9 +200,11 @@ zero_idx = round(2 / 1000 * fs);
 l_respL(zero_idx + 22) = 1;
 r_respL(zero_idx + 10) = 1;
 ref_respL(zero_idx) = 1;
-handles.lch_iresp_handleL = plot(t_respL, 20 * log10(l_respL), 'linewidth', 1);
+handles.back_iresp_handleL = plot(t_respL, 20 * log10(l_respL), 'linewidth', 1);
+handles.lch_color = get(handles.back_iresp_handleL, 'color');
 hold all
-handles.rch_iresp_handleL = plot(t_respL, 20 * log10(r_respL), 'linewidth', 1);
+handles.front_iresp_handleL = plot(t_respL, 20 * log10(r_respL), 'linewidth', 1);
+handles.rch_color = get(handles.front_iresp_handleL, 'color');
 handles.refch_iresp_handleL = plot(t_respL, 20 * log10(ref_respL), 'linewidth', 1);
 grid on;
 axis([-2 nResponse * 1.1 / fs * 1000 -60 0]);
@@ -269,13 +272,13 @@ if length(y) > 2 * nResponse + 1
     set(handles.r_bar, 'ydata', 100 + 20 * log10(std(y(end-2*nResponse:end, 2))));
     set(handles.r_peak, 'ydata', [0 0] + 100 + 20 * log10(max(abs(y(end-2*nResponse:end, 2)))));
 end
-if length(y) > 7 * fs + 4 * nResponse
+if length(y) > 7 * fs + 6 * nResponse %length(y) > 7 * fs + 4 * nResponse
     marginy = 7 * fs;
     sum_signal = y(end - marginy:end, :);
     sum_signal1 = fftfilt(handles.setting.fvnFilt1, sum_signal(length(sum_signal) - fs * 6:length(sum_signal), 1));
     sum_signal2 = fftfilt(handles.setting.fvnFilt2, sum_signal(length(sum_signal) - fs * 6:length(sum_signal), 1));
     sum_signal_ref = fftfilt(handles.setting.fvnFilt2, sum_signal(length(sum_signal) - fs * 6:length(sum_signal), 2));
-    segIdx = (1:4 * nResponse);
+    segIdx = (1:6 * nResponse);
     w = blackman(length(segIdx));
     w = w / sum(w);
     start_idx = length(sum_signal1) - length(segIdx) - fs;
@@ -288,12 +291,18 @@ if length(y) > 7 * fs + 4 * nResponse
     cumpw2 = cumsum(abs(fft(x2 .* w, lengthFvn)) .^ 2);
     cumpw3 = cumsum(abs(fft(x3 .* w, lengthFvn)) .^ 2);
     pw1_harmonics = interp1(fx, cumpw1, fx_harmonics + fo / 2) - interp1(fx, cumpw1, fx_harmonics - fo / 2);
-    pw2_harmonics = interp1(fx, cumpw2, fx_harmonics + fo / 2) - interp1(fx, cumpw2, fx_harmonics - fo / 2);
+    pw2_harmonics = interp1(fx, cumpw2, fx_harmonics + fo / 2 - fo / 2) - interp1(fx, cumpw2, fx_harmonics - fo / 2 - fo / 2);
     pw3_harmonics = interp1(fx, cumpw3, fx_harmonics + fo / 2) - interp1(fx, cumpw3, fx_harmonics - fo / 2);
     set(handles.lchSpectrumHandle, 'ydata', 10 * log10(pw1_harmonics) + handles.levelBias);
     set(handles.rchSpectrumHandle, 'ydata', 10 * log10(pw2_harmonics) + handles.levelBias);
     set(handles.errSpectrumHandle, 'ydata', 10 * log10(pw3_harmonics) + handles.levelBias);
     set(handles.spectrumAxis, 'ylim', [-120 -20] + handles.levelBias);
+    measuredData.recordedWave = sum_signal;
+    measuredData.x1Org = x1;
+    measuredData.x2Org = x2;
+    measuredData.x3Org = x3;
+
+    
     % --- impulse response display
     x_ref = filter(a1 / sum(a1), 1, x_ref);
     x1 = filter(a1 / sum(a1), 1, x1);
@@ -316,20 +325,18 @@ if length(y) > 7 * fs + 4 * nResponse
     max_rch = max(abs(x2(ref_loc - zero_idx + (1:resp_length))));
     set(handles.lch_iresp_handle, 'ydata', x1(ref_loc - zero_idx + (1:resp_length)) / max_lch);
     set(handles.rch_iresp_handle, 'ydata', x2(ref_loc - zero_idx + (1:resp_length)) / max_rch);
-    % --- long impulse response
-    if get(handles.RchannelRadio, 'value')
-        set(handles.rch_iresp_handleL, 'visible', 'on');
-    else
-        set(handles.rch_iresp_handleL, 'visible', 'off');
-    end
-    if get(handles.LchannelRadio, 'value')
-        set(handles.lch_iresp_handleL, 'visible', 'on');
-    else
-        set(handles.lch_iresp_handleL, 'visible', 'off');
-    end
-    lx1_max = length(x1);
-    set(handles.lch_iresp_handleL, 'ydata', 20*log10(abs(x1(min(lx1_max, ref_loc - zero_idx + (1:resp_lengthL))) / max_lch)));
-    set(handles.rch_iresp_handleL, 'ydata', 20*log10(abs(x2(min(lx1_max, ref_loc - zero_idx + (1:resp_lengthL))) / max_rch)));
+    
+    %---- save the latest data
+    measuredData.x1 = x1;
+    measuredData.x2 = x2;
+    measuredData.x3 = x3;
+    measuredData.x_ref = x_ref;
+    measuredData.reference_location = ref_loc;
+    measuredData.zero_idx = zero_idx;
+    measuredData.calLevel = handles.calLevel;
+    measuredData.levelBias = handles.levelBias;
+    measuredData.samplingFrequency = fs;
+    handles.measuredData = measuredData;
     
     % --- log spectrum display
     fftlresp = handles.fftlresp;
@@ -351,6 +358,33 @@ if length(y) > 7 * fs + 4 * nResponse
     set(handles.lch_logspec, 'ydata', 10 * log10(pws1 / maxPwr));
     set(handles.rch_logspec, 'ydata', 10 * log10(pws2 / maxPwr));
     set(handles.err_logspec, 'ydata', 10 * log10(pws3 / maxPwr));
+    
+    % --- long impulse response
+    %{
+    if get(handles.RchannelRadio, 'value')
+        set(handles.front_iresp_handleL, 'visible', 'on');
+    else
+        set(handles.front_iresp_handleL, 'visible', 'off');
+    end
+    if get(handles.LchannelRadio, 'value')
+        set(handles.back_iresp_handleL, 'visible', 'on');
+    else
+        set(handles.back_iresp_handleL, 'visible', 'off');
+    end
+    %}
+    lx1_max = length(x1);
+    if mean(pws1(selectrIdx)) < mean(pws2(selectrIdx))
+    set(handles.back_iresp_handleL, 'ydata', 20*log10(abs(x1(min(lx1_max, ref_loc - zero_idx + (1:resp_lengthL))) / max_lch)), ...
+        'color', handles.lch_color);
+    set(handles.front_iresp_handleL, 'ydata', 20*log10(abs(x2(min(lx1_max, ref_loc - zero_idx + (1:resp_lengthL))) / max_rch)), ...
+        'color', handles.rch_color);
+    else
+    set(handles.back_iresp_handleL, 'ydata', 20*log10(abs(x2(min(lx1_max, ref_loc - zero_idx + (1:resp_lengthL))) / max_rch)), ...
+        'color', handles.rch_color);
+    set(handles.front_iresp_handleL, 'ydata', 20*log10(abs(x1(min(lx1_max, ref_loc - zero_idx + (1:resp_lengthL))) / max_lch)), ...
+        'color', handles.lch_color);
+    end
+
     %end
     if handles.calLevel == 0
         if get(handles.radiobutton80, 'value');handles.calLevel = 80; end
@@ -400,6 +434,7 @@ switch get(handles.player1, 'running')
 end
 set(handles.startButton, 'enable', 'off');
 set(handles.stopButton, 'enable', 'on');
+set(handles.reportButton, 'enable', 'off');
 guidata(hObject, handles);
 end
 
@@ -419,6 +454,7 @@ switch get(handles.player1, 'running')
 end
 set(handles.startButton, 'enable', 'on');
 set(handles.stopButton, 'enable', 'off');
+set(handles.reportButton, 'enable', 'on');
 guidata(hObject, handles);
 end
 
@@ -465,4 +501,18 @@ function RchannelRadio_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Hint: get(hObject,'Value') returns toggle state of RchannelRadio
+end
+
+
+% --- Executes on button press in reportButton.
+function reportButton_Callback(hObject, eventdata, handles)
+% hObject    handle to reportButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+reportFigName = ['stView' datestr(now, 30) '.eps'];
+print(handles.RoomResponseGUI, '-noui', '-depsc', reportFigName);
+reportDataName = ['stData' datestr(now, 30) '.mat'];
+userdata = get(handles.recorder1, 'userdata');
+measuredData = userdata.measuredData;
+save(reportDataName, 'measuredData');
 end
