@@ -1,5 +1,5 @@
 # FVN
-Frequency domain variants of Velvet Noise
+Frequency domain variants of Velvet Noise, a flexible building unit for speech synthesis, psychoacoustic research and acoustic measurement.
 
 ## Introduction
 
