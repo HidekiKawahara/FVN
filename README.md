@@ -73,7 +73,7 @@ It brins the following GUI for the measurement.
 
 ### Technical document
 
-I placed a Japanese technical document in /doc/ folder. English and updated documents will be added by  31 August, 2019. (Sorry for delay)
+Both Japanese and English technical documents are reday now (16/Sept./2019) Excuse me for the delay.
 
 ## Directories
 
@@ -97,6 +97,7 @@ Please check the references for details
 
 ## References
 
+1. Hideki Kawahara, Ken-Ichi Sakakibara, Eri Haneishi, Kaori Hagiwara: Real-time and interactive tools for vocal training based on an analytic signal with a cosine series envelope, arXiv preprint arXiv:1909.03650, [PDF](https://arxiv.org/pdf/1909.03650)
 1. 河原英紀, 榊原健一, & 水町光徳. (2019). 周波数領域 velvet noise を用いた音響計測手順の拡張について (応用音響). 電子情報通信学会技術研究報告= IEICE technical report: 信学技報, 119(115), 77-82.
 1. Kawahara, H., Sakakibara, K. I., Morise, M., Banno, H., Toda, T., & Irino, T. (2018). Frequency domain variants of velvet noise and their application to speech processing and synthesis: with appendices. arXiv preprint arXiv:1806.06812.  [link to arXiV][FVN arxiv1]
 [FVN arxiv1]:https://arxiv.org/abs/1806.06812
