@@ -69,7 +69,6 @@ Refer to the Japanese document on the command
 standingWvViewer
 ```
 It brins the following GUI for the measurement.
-![acoustic measurement](stwaveViewer.jpg)
 
 ### Technical document
 
