@@ -62,6 +62,12 @@ It also output the following in the command window.
 
 This is also the contents of the structured variable "output."
 
+### Release note
+
+## Temporal envelope shaping based on nonlinear frequency axis warping (30/Oct/2019)
+
+This pre-reliease is the last version which does not require "Audio Toolbox"
+
 ##  New! GUI application for stereo acoustic measurement in real-time (19/August/2019)
 
 Refer to the Japanese document on the command
@@ -96,6 +102,7 @@ Please check the references for details
 
 ## References
 
+1. Hideki Kawahara, Ken-Ichi Sakakibara, Mitsunori Mizumachi, Hideki Banno, Masanori Morise, Toshio Irino: Application of frequency domain variants of velvet noise to¥¥ multi-aspect measurement of acoustic systems, IEICE Technical report, EA2019-47, pp.69-75, 2019-10.
 1. Hideki Kawahara, Ken-Ichi Sakakibara, Mitsunori Mizumachi, Hideki Banno, Masanori Morise, Toshio Irino: Frequency domain variant of Velvet noise and its application to acoustic measurements, Audio and Speech Processing, arXiv:1909.04301 [eess.AS], [PDF](https://arxiv.org/abs/1909.04301)
 1. 河原英紀, 榊原健一, & 水町光徳. (2019). 周波数領域 velvet noise を用いた音響計測手順の拡張について (応用音響). 電子情報通信学会技術研究報告= IEICE technical report: 信学技報, 119(115), 77-82.
 1. Kawahara, H., Sakakibara, K. I., Morise, M., Banno, H., Toda, T., & Irino, T. (2018). Frequency domain variants of velvet noise and their application to speech processing and synthesis: with appendices. arXiv preprint arXiv:1806.06812.  [link to arXiV][FVN arxiv1]
