@@ -332,7 +332,7 @@ lrespview =  nto;
 av_resp_th = ZoneThirdPowerSpectrum(mean(avResp(1:lrespview,:),2), fftl, fs);
 sil_th_av = ZoneThirdPowerSpectrum(avSil(1:lrespview,:), fftl, fs);
 referencePower = ZbiasSet(av_resp_th, fftl, fs);
-figure;
+figHandel = figure;
 semilogx(fx(1:fftl / 2), 10 * log10(av_resp_th / referencePower), 'linewidth', 2);
 grid on;
 hold all
@@ -359,7 +359,7 @@ ylabel('level (dB: rel. to average)');
 
 recordNameBody = ['fvn44k' datestr(now, 30)];
 printFileName = [recordNameBody '.eps'];
-print('-depsc', printFileName);
+print(figHandel, '-depsc', printFileName);
 waveFileName = [recordNameBody '.wav'];
 audiowrite(waveFileName, xrecord, fs, 'bitspersample', 24);
 
