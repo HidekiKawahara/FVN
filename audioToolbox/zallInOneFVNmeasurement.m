@@ -1,11 +1,12 @@
-function output = allInOneFVNmeasurement(memoText, varargin)
+function output = zallInOneFVNmeasurement(memoText, varargin)
 % Acoustic impulse response and nonlinear component measurement
 % How to call
-% output = allInOneFVNmeasurement(memoText)
-% output = allInOneFVNmeasurement(memoText, number_of_FVNs)
-% output = allInOneFVNmeasurement(memoText, number_of_FVNs, response_length)
-% output = allInOneFVNmeasurement(memoText, number_of_FVNs, response_length, spl)
-% output = allInOneFVNmeasurement(memoText, number_of_FVNs, response_length, spl, exmode)
+% output = zallInOneFVNmeasurement(memoText)
+% output = zallInOneFVNmeasurement(memoText, number_of_FVNs)
+% output = zallInOneFVNmeasurement(memoText, number_of_FVNs, response_length)
+% output = zallInOneFVNmeasurement(memoText, number_of_FVNs, response_length, spl)
+% output = zallInOneFVNmeasurement(memoText, number_of_FVNs, response_length, spl, exmode)
+% output = zallInOneFVNmeasurement(memoText, number_of_FVNs, response_length, spl, exmode, outPath)
 %
 % Argument
 %  memoText        : text string
@@ -17,7 +18,8 @@ function output = allInOneFVNmeasurement(memoText, varargin)
 %  spl             : sound pressure level at microphone in A-weighting (dB)
 %                    The default value is 80 dB
 %  exmode          : execution mode selector
-%                    'measurement', 'measurement2ch', 'calibration', 'diagnosis'
+%                    'measurement', 'measurement2ch', 'calibration',
+%                    'diagnosis', 'measurementRch'
 %                    default 'measurement'
 %
 % Output
@@ -65,7 +67,8 @@ function output = allInOneFVNmeasurement(memoText, varargin)
 % limitations under the License.
 
 mypath = mfilename('fullpath');
-myDirectory = mypath(1:strfind(mypath, 'allInOneFVNmeasurement')-1);
+%myDirectory = mypath(1:strfind(mypath, 'allInOneFVNmeasurement')-1);
+outPath = '';
 switch nargin
     case 1
         n_mix = 4;
@@ -126,6 +129,12 @@ switch nargin
         to = varargin{2};
         spl = varargin{3};
         exmode = varargin{4};
+    case 6
+        n_mix = varargin{1};
+        to = varargin{2};
+        spl = varargin{3};
+        exmode = varargin{4};
+        outPath = varargin{5};
     otherwise
         help allInOneFVNmeasurement
         output.errorMessage = 'Please check how to use this.';
@@ -183,7 +192,8 @@ start_tic = tic;
 nto = round(to * fs);
 fftl = 32768;
 %
-buffer = zeros(2 * fftlFVN + 2 * nto * 8 * signPeriod(n_mix), 1);
+%buffer = zeros(2 * fftlFVN + 2 * nto * 8 * signPeriod(n_mix), 1);
+buffer = zeros(round(1.5 * fftlFVN) + 8 * nto * signPeriod(n_mix), 1);
 base_idx = 1:fftlFVN;
 for ii = 1:n_mix
     nHead = 0;
@@ -195,7 +205,7 @@ for ii = 1:n_mix
     nEnd = nHead + nto + base_idx(end);
 end
 pinkBuffer = filter(1, a, buffer);
-%dataLength = length(pinkBuffer) / fs;
+dataLength = length(pinkBuffer) / fs;
 switch exmode
     case 'calibration'
         endPoint = fftlFVN / 2 + nto * 8 * signPeriod(n_mix);
@@ -228,8 +238,8 @@ switch exmode
         endPoint = nEnd;%fftlFVN / 2 + nto * 8 * signPeriod(n_mix) + fs;
         %disp(['Measurement starts. Be quiet for ' num2str((length(buffer) * 1.1) / fs, '%5.0f') ' seconds. Please.']);
         disp(['Measurement starts. Be quiet for ' num2str(endPoint / fs, '%5.0f') ' seconds. Please.']);
-        %player = audioplayer([pinkBuffer pinkBuffer * 0] / max(abs(pinkBuffer)) * 0.8, fs);
-        player = audioplayer(pinkBuffer(1:nEnd) / max(abs(pinkBuffer)) * 0.8, fs);
+        player = audioplayer([pinkBuffer pinkBuffer * 0] / max(abs(pinkBuffer)) * 0.8, fs);
+        %player = audioplayer(pinkBuffer(1:nEnd) / max(abs(pinkBuffer)) * 0.8, fs);
         recObj = audiorecorder(fs, 24, 1);
         record(recObj);
         pause(1);
@@ -237,7 +247,23 @@ switch exmode
         while strcmp(get(player, 'runnin'), 'on')
             pause(0.5);
         end
-        pause(2);
+        pause(1);
+        xrecord = getaudiodata(recObj);
+        stop(recObj);
+    case 'measurementRch'
+        endPoint = nEnd;%fftlFVN / 2 + nto * 8 * signPeriod(n_mix) + fs;
+        %disp(['Measurement starts. Be quiet for ' num2str((length(buffer) * 1.1) / fs, '%5.0f') ' seconds. Please.']);
+        disp(['Measurement starts. Be quiet for ' num2str(endPoint / fs, '%5.0f') ' seconds. Please.']);
+        player = audioplayer([pinkBuffer * 0 pinkBuffer] / max(abs(pinkBuffer)) * 0.8, fs);
+        %player = audioplayer(pinkBuffer(1:nEnd) / max(abs(pinkBuffer)) * 0.8, fs);
+        recObj = audiorecorder(fs, 24, 1);
+        record(recObj);
+        pause(1);
+        play(player);
+        while strcmp(get(player, 'runnin'), 'on')
+            pause(0.5);
+        end
+        pause(1);
         xrecord = getaudiodata(recObj);
         stop(recObj);
     case 'measurement2ch'
@@ -261,6 +287,7 @@ switch exmode
 end
 
 levelStr = oneThirdSpecDisplayForFVN(xrecord(:, 1), fs, spl, 0);
+%xrecord(1:length(pinkBuffer), 1) = pinkBuffer;
 
 xr = filter(a, 1, xrecord);
 
@@ -269,15 +296,25 @@ tmpResp = fftfilt(fvnSet(end:-1:1, 1), xr);
 switch exmode
     case 'measurement'
         gg = fftfilt(hanning(101),tmpResp .^2);
+    case 'measurementRch'
+        gg = fftfilt(hanning(101),tmpResp .^2);
     case 'measurement2ch'
         gg = fftfilt(hanning(101),tmpResp(:, 2) .^2);
 end
 maxgg = max(gg);
-ggtrim = gg .* (gg > maxgg * 0.7);
 idx = 1:length(gg);
+ggtrim2 = gg .* (gg > maxgg * 0.1);
+peaksd2Value = gg(idx(ggtrim2 > ggtrim2([1, 1:end-1]) & ggtrim2 >= ggtrim2([2:end, end])));
+sortedPeaks = sort(peaksd2Value, 'descend')/maxgg;
+if length(sortedPeaks) ~= signPeriod(n_mix)*8
+    newThreshold = (sortedPeaks(signPeriod(n_mix)*8) + sortedPeaks(signPeriod(n_mix)*8 + 1)) / 2;
+else
+    newThreshold = 0.1;
+end
+ggtrim = gg .* (gg > maxgg * newThreshold);
 peaksd = idx(ggtrim > ggtrim([1, 1:end-1]) & ggtrim >= ggtrim([2:end, end]));
 peaksd = peaksd - 50;
-if ~ismember(length(peaksd), signPeriod * 8)
+if ~ismember(length(peaksd), signPeriod * 4)
     disp(['the size is wrong:' num2str(length(peaksd))])
     output.xrecord = xrecord;
     output.equalizedRecord = xr;
@@ -350,7 +387,7 @@ if n_mix >= 4
     semilogx(fx(1:fftl / 2), 10 * log10(av_dresp_th / referencePower), '--', 'linewidth', 2);
 end
 axis([20 fs / 2 -65 20]);
-title([memoText '  n-FVN:' num2str(n_mix) '  tp:' num2str(to) ' (s)  SPL(A):' num2str(spl) ' dB']);
+title([memoText '  n-FVN:' num2str(n_mix) '  tp:' num2str(to) ' (s) ']);
 if n_mix >= 4
     legend('LIN.', 'equiv BG', 'NON-LIN.', 'location', 'best');
 else
@@ -359,7 +396,9 @@ end
 xlabel('frequency (Hz)');
 ylabel('level (dB: rel. to average)');
 
-outPath = uigetdir;
+if isempty(outPath)
+    outPath = uigetdir;
+end
 
 recordNameBody = ['fvn44k' datestr(now, 30)];
 printFileName = [outPath '/' recordNameBody '.eps'];
@@ -403,6 +442,7 @@ output.elapsedTime = toc(start_tic);
 saveFileName = [outPath '/' recordNameBody '.mat'];
 save(saveFileName, 'output');
 output.recordedWaveform = xrecord;
+output.recordNameBody = recordNameBody;
 end
 %%
 
