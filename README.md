@@ -66,7 +66,7 @@ This is also the contents of the structured variable "output."
 
 ### Audio Toolbox and AppDesigner are awsome (06/Jan./2020)
 
-I will migrate to this environment. Time saving. Please check the new directory "audioToolbox." An real-time and interactive acoustic impulse measurement tool is available (rtFVNRespToolPinkEx). It has the following GUI. Check reference documents.
+I will migrate to this environment. Time saving. Please check the new directory "audioToolbox." A real-time and interactive acoustic impulse measurement tool is available (rtFVNRespToolPinkEx). It has the following GUI. Check reference documents.
 
 ![GUI image](rtFVNtoolGUI.jpg)
 
