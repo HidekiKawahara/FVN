@@ -64,9 +64,9 @@ This is also the contents of the structured variable "output."
 
 ## Release note
 
-### Audio Toolbox and AppDesigner are awsome
+### Audio Toolbox and AppDesigner are awsome (06/Jan./2020)
 
-I will migrate to this environment. Time saving. Please check new directory
+I will migrate to this environment. Time saving. Please check the new directory "audioToolbox"
 
 ### Temporal envelope shaping based on nonlinear frequency axis warping (30/Oct/2019)
 
