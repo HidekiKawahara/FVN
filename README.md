@@ -91,11 +91,11 @@ It brins the following GUI for the measurement.
 * test
   * test script and functions 
 * GUI 
- *  GUI applications 
+  *  GUI applications 
 * doc 
- * Technical documents and links to multimedia
+  * Technical documents and links to multimedia
 * audioToolbox
- * Real-time and interactive tool for acoustic impulse response measurement developed using Audio System Toolbox and App Designer. (Standalone application for MacOS and Windows are linked from technical documents.)
+  * Real-time and interactive tool for acoustic impulse response measurement developed using Audio System Toolbox and App Designer. (Standalone application for MacOS and Windows are linked from technical documents.)
 
 ## Technical details
 A unit FVN is an impulse response of an all-pass filter generated from two sets of random numbers.
