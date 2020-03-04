@@ -64,6 +64,10 @@ This is also the contents of the structured variable "output."
 
 ## Release note
 
+### A snapshot directory (ieiceAndAsj2020March) for FVN applications is added (04/March/2020)
+
+Acoustic measurement tool (rtFVNRespToolPinkEx) and Auditory to voice production measurement tool (voiceModulationTestAppMCal) are added as supplement materials to IEICE technical meeting. A MATLAB live script for demonstrating orthogonalization of FVN-based sequences is added. Tools require Audio Toolbox.
+
 ### Audio Toolbox and AppDesigner are awsome (06/Jan./2020)
 
 I will migrate to this environment. Time saving. Please check the new directory "audioToolbox." A real-time and interactive acoustic impulse measurement tool is available (rtFVNRespToolPinkEx). It has the following GUI. Check reference documents.
