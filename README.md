@@ -66,7 +66,7 @@ This is also the contents of the structured variable "output."
 
 ### Audio Toolbox and AppDesigner are awsome (06/Jan./2020)
 
-I will migrate to this environment. Time saving. Please check the new directory "audioToolbox." An real-time and interactive acoustic impulse measurement tool is available (rtFVNRespToolPinkEx). It has the following GUI. Check reference documents.
+I will migrate to this environment. Time saving. Please check the new directory "audioToolbox." A real-time and interactive acoustic impulse measurement tool is available (rtFVNRespToolPinkEx). It has the following GUI. Check reference documents.
 
 ![GUI image](rtFVNtoolGUI.jpg)
 
@@ -91,11 +91,11 @@ It brins the following GUI for the measurement.
 * test
   * test script and functions 
 * GUI 
- *  GUI applications 
+  *  GUI applications 
 * doc 
- * Technical documents and links to multimedia
+  * Technical documents and links to multimedia
 * audioToolbox
- * Real-time and interactive tool for acoustic impulse response measurement developed using Audio System Toolbox and App Designer. (Standalone application for MacOS and Windows are linked from technical documents.)
+  * Real-time and interactive tool for acoustic impulse response measurement developed using Audio System Toolbox and App Designer. (Standalone application for MacOS and Windows are linked from technical documents.)
 
 ## Technical details
 A unit FVN is an impulse response of an all-pass filter generated from two sets of random numbers.
