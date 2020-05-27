@@ -64,6 +64,8 @@ This is also the contents of the structured variable "output."
 
 ## Release note
 
+### Preparation for Otogaku 2020: directory (ieiceAndAsj2020March) update
+
 ### A snapshot directory (ieiceAndAsj2020March) for FVN applications is added (04/March/2020)
 
 Acoustic measurement tool (rtFVNRespToolPinkEx) and Auditory to voice production measurement tool (voiceModulationTestAppMCal) are added as supplement materials to IEICE technical meeting. A MATLAB live script for demonstrating orthogonalization of FVN-based sequences is added. Tools require Audio Toolbox.
