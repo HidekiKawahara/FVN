@@ -64,6 +64,10 @@ This is also the contents of the structured variable "output."
 
 ## Release note
 
+### A substantial update of the interactive and realtime acoustic measurement tool with revision on FVN infrastructure (07/Aug./2020)
+
+Please refer an article [PDF](http://arxiv.org/abs/2008.02439) for technical details.
+
 ### Preparation for Otogaku 2020: directory (ieiceAndAsj2020March) update
 
 ### A snapshot directory (ieiceAndAsj2020March) for FVN applications is added (04/March/2020)
