@@ -1,9 +1,8 @@
-function output = tripletMeasurement(channelID, calLeveldB, outPath, nChannel)
+function output = tripletMeasurement(channelID, calLeveldB, outPath, nChannel, synchSource)
 %%
 [xRef, fs] = audioread("testTripleFvn44Pink.wav");
 nRepat = 44;
 nto = round(0.2 * fs);
-tmpOut = aweightTable;
 outputLPC = pinkLPCgenM(fs);
 tmp = load('fvnMin100ms.mat');
 fvnMin200ms = tmp.fvnMin100ms;
@@ -26,12 +25,47 @@ stop(audioRecorder);
 xr = filter(outputLPC.pinkLPC, 1, y);
 calibCf = 10 ^ (calLeveldB / 20);
 if nChannel == 2
-xRef = xr(:, 2) * calibCf;
-xRec = xr(:, 1) * calibCf;
+    switch synchSource
+        case 'R-Ch.'
+            xRef = xr(:, 2) * calibCf;
+            xRec = xr(:, 1) * calibCf;
+            analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf, channelID, calLeveldB);
+            output = reportTheResults(analysisOut, outPath);
+        case {'Internal','Internal2'}
+            xRec = xr(:, 1) * calibCf;
+            xRef = [];
+            analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf, channelID, calLeveldB);
+            output = reportTheResults(analysisOut, outPath);
+            switch synchSource
+                case 'Internal2'
+                    xRec2 = xr(:, 2) * calibCf;
+                    analysisOut2 = analyzeTriplFVN(fvnSet, xRec2, xRef, fs, nRepat, nto , y(:, 2), calibCf, channelID, calLeveldB);
+                    output2 = reportTheResults(analysisOut2, outPath);
+                    output.output2 = output2;
+            end
+    end
 else
     xRec = xr(:, 1) * calibCf;
     xRef = [];
+    analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf, channelID, calLeveldB);
+    output = reportTheResults(analysisOut, outPath);
 end
+end
+
+function output = reportTheResults(analysisOut, outPath)
+    outputQ = analysisOut.outputQ;
+    tmpFname = ['fvnResp' datestr(now, 30) 'LAeq'];
+    foName = string(tmpFname)  + num2str(round(analysisOut.spl)) + "dBtst.eps";
+    print(analysisOut.fhgHandle, "-depsc", [outPath '/' char(foName)])
+    fMatName = string(tmpFname)  + num2str(round(analysisOut.spl)) + "dBtst.mat";
+    save([outPath '/' char(fMatName)], "outputQ");
+    output.recordNameBody = [tmpFname num2str(round(analysisOut.spl))  'dBtst'];
+    output.analysisStr = outputQ;
+end
+
+function analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf, channelID, calLeveldB)
+stTic = tic;
+tmpOut = aweightTable;
 outputQ = quatroFVNresponseAnalysisQ(fvnSet, xRec, xRef, fs, nRepat, nto);
 weightFilt = weightingFilter;
 xA = weightFilt(y(:, 1)) * calibCf;
@@ -59,13 +93,8 @@ outputQ.fvnConditions.repetitionInterval = nto;
 outputQ.fvnConditions.fvnSet = fvnSet;
 outputQ.channelID = channelID;
 outputQ.dB2convertSPL = calLeveldB;
-% ----
-tmpFname = ['fvnResp' datestr(now, 30) 'LAeq'];
-foName = string(tmpFname)  + num2str(round(spl)) + "dBtst.eps";
-print(fhgHandle, "-depsc", [outPath '/' char(foName)])
-fMatName = string(tmpFname)  + num2str(round(spl)) + "dBtst.mat";
-save([outPath '/' char(fMatName)], "outputQ");
-output.recordNameBody = [tmpFname num2str(round(spl))  'dBtst'];
-output.analysisStr = outputQ;
+analysisOut.elapsedTime = toc(stTic);
+analysisOut.spl = spl;
+analysisOut.outputQ = outputQ;
+analysisOut.fhgHandle = fhgHandle;
 end
-
