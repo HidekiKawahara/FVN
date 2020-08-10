@@ -1,5 +1,5 @@
 function output = tripletMeasurement(channelID, calLeveldB, outPath, nChannel, synchSource)
-%%
+%
 [xRef, fs] = audioread("testTripleFvn44Pink.wav");
 nRepat = 44;
 nto = round(0.2 * fs);
@@ -23,31 +23,31 @@ pause(dataDuration + 1);
 y = getaudiodata(audioRecorder);
 stop(audioRecorder);
 xr = filter(outputLPC.pinkLPC, 1, y);
-calibCf = 10 ^ (calLeveldB / 20);
+calibCf = 10 .^ (calLeveldB / 20);
 if nChannel == 2
     switch synchSource
         case 'R-Ch.'
-            xRef = xr(:, 2) * calibCf;
-            xRec = xr(:, 1) * calibCf;
-            analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf, channelID, calLeveldB);
+            xRef = xr(:, 2) * calibCf(1);
+            xRec = xr(:, 1) * calibCf(1);
+            analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf(1), channelID, calLeveldB);
             output = reportTheResults(analysisOut, outPath);
         case {'Internal','Internal2'}
-            xRec = xr(:, 1) * calibCf;
+            xRec = xr(:, 1) * calibCf(1);
             xRef = [];
-            analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf, channelID, calLeveldB);
+            analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf(1), channelID, calLeveldB);
             output = reportTheResults(analysisOut, outPath);
             switch synchSource
                 case 'Internal2'
-                    xRec2 = xr(:, 2) * calibCf;
-                    analysisOut2 = analyzeTriplFVN(fvnSet, xRec2, xRef, fs, nRepat, nto , y(:, 2), calibCf, channelID, calLeveldB);
+                    xRec2 = xr(:, 2) * calibCf(2);
+                    analysisOut2 = analyzeTriplFVN(fvnSet, xRec2, xRef, fs, nRepat, nto , y(:, 2), calibCf(2), channelID, calLeveldB);
                     output2 = reportTheResults(analysisOut2, outPath);
                     output.output2 = output2;
             end
     end
 else
-    xRec = xr(:, 1) * calibCf;
+    xRec = xr(:, 1) * calibCf(1);
     xRef = [];
-    analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf, channelID, calLeveldB);
+    analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf(1), channelID, calLeveldB);
     output = reportTheResults(analysisOut, outPath);
 end
 end
