@@ -68,6 +68,8 @@ This is also the contents of the structured variable "output."
 
 ![GUI image](acousticMeasurementFVN.jpg)
 
+Getting started of acoustic tool (In Japanese) [link to Google doc]:https://docs.google.com/document/d/1Bzc9pxeFWYcpTncrk4B3Rwt3LonXPlOoM4Hj-Fg7UZI/edit?usp=sharing
+
 ### A substantial update of the interactive and realtime acoustic measurement tool with revision on FVN infrastructure (07/Aug./2020)
 
 Please refer an article [PDF](http://arxiv.org/abs/2008.02439) for technical details.
