@@ -70,7 +70,7 @@ If your PC has access to a mic and a loudspeaker (usually builtin), got 'acousti
     
 In two seconds a test signal (sounds like noise) starts and lasts for about 12 seconds. Then, the following figure will be shown.
     
-    ![test image](sampleTestPC.jpg)
+   ![new test image](sampleTestPC.jpg)
     
 For detailed explanation of this display, please check the latest techinical article ( [link to arXiv]:https://arxiv.org/abs/2008.02439).
 
