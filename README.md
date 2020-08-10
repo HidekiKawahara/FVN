@@ -74,6 +74,8 @@ In two seconds a test signal (sounds like noise) starts and lasts for about 12 s
     
 For detailed explanation of this display, please check the latest techinical article ( [link to arXiv]:https://arxiv.org/abs/2008.02439).
 
+Then, you can try the revised version of an interactive and realtime acoustic tool using FVN. Have fun!
+
 A detailed getting started manual in Japanese is available. English version will be ready soon.
 [link to Google doc]:https://docs.google.com/document/d/1Bzc9pxeFWYcpTncrk4B3Rwt3LonXPlOoM4Hj-Fg7UZI/edit?usp=sharing
 
