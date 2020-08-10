@@ -64,6 +64,10 @@ This is also the contents of the structured variable "output."
 
 ## Release note
 
+### Refinement of the substantial update and removing outdated directories (10/Aug./2020)
+
+![GUI image](acousticMeasurementFVN.jpg)
+
 ### A substantial update of the interactive and realtime acoustic measurement tool with revision on FVN infrastructure (07/Aug./2020)
 
 Please refer an article [PDF](http://arxiv.org/abs/2008.02439) for technical details.
