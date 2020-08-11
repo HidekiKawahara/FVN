@@ -53,14 +53,14 @@ end
 end
 
 function output = reportTheResults(analysisOut, outPath)
-    outputQ = analysisOut.outputQ;
-    tmpFname = ['fvnResp' datestr(now, 30) 'LAeq'];
-    foName = string(tmpFname)  + num2str(round(analysisOut.spl)) + "dBtst.eps";
-    print(analysisOut.fhgHandle, "-depsc", [outPath '/' char(foName)])
-    fMatName = string(tmpFname)  + num2str(round(analysisOut.spl)) + "dBtst.mat";
-    save([outPath '/' char(fMatName)], "outputQ");
-    output.recordNameBody = [tmpFname num2str(round(analysisOut.spl))  'dBtst'];
-    output.analysisStr = outputQ;
+outputQ = analysisOut.outputQ;
+tmpFname = ['fvnResp' datestr(now, 30) 'LAeq'];
+foName = string(tmpFname)  + num2str(round(analysisOut.spl)) + "dBtst.eps";
+print(analysisOut.fhgHandle, "-depsc", [outPath '/' char(foName)])
+fMatName = string(tmpFname)  + num2str(round(analysisOut.spl)) + "dBtst.mat";
+save([outPath '/' char(fMatName)], "outputQ");
+output.recordNameBody = [tmpFname num2str(round(analysisOut.spl))  'dBtst'];
+output.analysisStr = outputQ;
 end
 
 function analysisOut = analyzeTriplFVN(fvnSet, xRec, xRef, fs, nRepat, nto, y, calibCf, channelID, calLeveldB)
@@ -69,7 +69,11 @@ tmpOut = aweightTable;
 outputQ = quatroFVNresponseAnalysisQ(fvnSet, xRec, xRef, fs, nRepat, nto);
 weightFilt = weightingFilter;
 xA = weightFilt(y(:, 1)) * calibCf;
-spl = 20 * log10(std(xA(round(length(xRec) / 2) + (-nto:nto))));
+if calLeveldB(1) == 0
+    spl = 80;
+else
+    spl = 20 * log10(std(xA(round(length(xRec) / 2) + (-nto:nto))));
+end
 thridLvl = interp1(outputQ.frequencyAxis, 10 .^ (outputQ.smavGain / 10), tmpOut(:,1), 'linear',"extrap");
 splInnr = 10*log10(sum(thridLvl(:) .* 10 .^ (tmpOut(:,2) / 10)));
 calibSpl = spl - splInnr;
@@ -81,10 +85,14 @@ hold all;semilogx(outputQ.frequencyAxis, outputQ.smprecedingSpec + calibSpl, 'Li
 hold all;semilogx(outputQ.frequencyAxis, outputQ.smnonLinearSpec + calibSpl, 'LineWidth', 2);grid on;
 axis([10 fs/2 10 85])
 legend('lin.', 'lin.Ex', 'BG.est', 'BG.pre', 'nonLin.', 'Location', "south", "numcolumns", 5)
-title("LAeq: " + num2str(spl) + " dB, with 1/3 octave smoothing")
 set(gca, "FontSize", 15, 'LineWidth', 2)
 xlabel("frequency (Hz)")
-ylabel("level (dB)")
+ylabel("Sound pressure level (dB, ref. 20\mu Pa)")
+if calLeveldB(1) == 0
+    title("Presumed LAeq 80dB with 1/3 octave smoothing")
+else
+    title("LAeq: " + num2str(spl,'%6.2f') + " dB, with 1/3 octave smoothing")
+end
 drawnow
 % ---- add analysis conditions to results ---
 outputQ.fvnConditions.samplingFrequency = fs;
