@@ -16,7 +16,7 @@ Before passing twenty seconds (usually less than ten seconds...), the following 
 
     'Passed (generateStandardFVN, generateFVN6real, generateSparseFVNset)'
 
-## Getting started (Quick start: Old version will be replaced)
+## Getting started (Quick start: Old version. Please do not try this.)
 
 If your PC has access to a mic and a loudspeaker (usually builtin), try the following command.
 
@@ -62,13 +62,13 @@ It also output the following in the command window.
 
 This is also the contents of the structured variable "output."
 
-## Getting started (Quick start: for acoustic tool)
+## Getting started (Quick start: for acoustic tool. Try this.)
 
 If your PC has access to a mic and a loudspeaker (usually builtin), got 'acousticTestFVN' directory and try the following command.
 
-    output = tripletMeasurement('L', 0, '~', 1, 'Internal')
+    output = tripletMeasurement('L', 0, '~', 1, 'Internal', 1)
     
-In two seconds a test signal (sounds like noise) starts and lasts for about 12 seconds. Then, the following figure will be shown.
+In two seconds a test signal (sounds like noise) starts and lasts for about 14 seconds. Then, the following figure will be shown.
     
    ![new test image](sampleTestPC.jpg)
     
