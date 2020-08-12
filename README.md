@@ -83,6 +83,10 @@ A detailed getting started manual in Japanese is available. English version will
 
 ## Release note
 
+### Realtime and interactive acoustic analysis tool is ready (v0.98). It has DOI (12/Aug./2020).
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3980721.svg)](https://doi.org/10.5281/zenodo.3980721)
+
 ### Refinement of the substantial update and removing outdated directories (10/Aug./2020)
 
 ![GUI image](acousticMeasurementFVN.jpg)
