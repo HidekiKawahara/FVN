@@ -1,5 +1,76 @@
-function output = quatroFVNresponseAnalysisQ(fvnSet, xRec, xRef, fs, nRepat, nto)
-%%
+function output = quatroFVNresponseAnalysisQ(fvnSet, xRec, xRef, fs, nRepeat, nto)
+%  Acoustic analysis using four unit FVNs
+%  output = quatroFVNresponseAnalysisQ(fvnSet, xRec, xRef, fs, nRepeat, nto)
+%
+%  Input argument
+%    fvnSet  : matrix with four unit FVNs as its column
+%    xRec    : response to the mixed FVN sequences
+%    xRef    : test signal consisting of the mixed FVN sequences
+%    fs      : sampling frequency (Hz)
+%    nRepeat : number of repetitions of the unit FVN in eaxh sequence
+%    nto     : allocation interval of unit FVNs (samples)
+%
+%  Output
+%    output : structure variable with the following fields
+%
+%                xRec: copy of response
+%                xRef: copy of reference
+%         avRespLevel: LAeq of the input signal
+%             bgLevel: LAeq of the background
+%          totalLevel: 40.4105
+%             nlLevel: LAeq of nonlinear component
+%          avResponse: average impulse response (length: nto)
+%         extResponse: extended impulse response (length: 4*nto)
+%               resd1: residual for sequence-1
+%               resd2: residual for sequence-2
+%               resd3: residual for sequence-3
+%              bufRec: for debug: pulse recovered signal
+%              bufRef: for debug: pulse recovered signal
+%       frequencyAxis: frequency axis for average response
+%     frequencyAxisEx: frequency axis for expanded response
+%              avGain: frequency view of the average response
+%             extGain: frequency view of the expanded response
+%      backGroundSpec: frequency view of the estimated background noise
+%       precedingSpec: frequency view of the measured background noise
+%       nonLinearSpec: frequency view of the nonlinear component
+%            smavGain: smoothed avGain
+%           smextGain: smoothed extGain
+%    smbackGroundSpec: smoothed backGroundSpec
+%     smprecedingSpec: smoothed precedingSpec
+%     smnonLinearSpec: smoothed nonLinearSpec
+%               okInd: process indicator: 1:normal
+%         elapsedTime: elapsed time (s)
+%           channelID: analysed output channel: 'L' or 'R'
+%       dB2convertSPL: calibration information to convert to SPL
+%       fvnConditions: structure variable with following fields
+%                      They represent analysis conditions
+%
+%     samplingFrequency: sampling frequency
+%               nRepeat: number of repetitions of unit FVNs
+%    repetitionInterval: allocation interval of unit FVNs (in sample)
+%                fvnSet: matrix with four unit FVNs as its column
+
+%  For analysis details, please refer the following article
+%
+%   Kawahara, H., Sakakibara, K. I., Mizumachi, M., Morise, M., & Banno, H. (2020). 
+%   Simultaneous measurement of time-invariant linear and nonlinear, 
+%   and random and extra responses using frequency domain variant of velvet noise. 
+%   arXiv preprint arXiv:2008.02439.
+
+%   Copyright 2020 Hideki Kawahara
+%
+%   Licensed under the Apache License, Version 2.0 (the "License");
+%   you may not use this file except in compliance with the License.
+%   You may obtain a copy of the License at
+%
+%       http://www.apache.org/licenses/LICENSE-2.0
+%
+%   Unless required by applicable law or agreed to in writing, software
+%   distributed under the License is distributed on an "AS IS" BASIS,
+%   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+%   See the License for the specific language governing permissions and
+%   limitations under the License.
+
 if length(xRec) > fs
     startTic = tic;
     B4 = [1  1  1  1  1  1  1  1; ...
@@ -7,7 +78,7 @@ if length(xRec) > fs
         1  1 -1 -1  1  1 -1 -1; ...
         1  1  1  1 -1 -1 -1 -1];
     if length(xRef) < fs
-        outputF = generateQuadFVNseq(fvnSet, nRepat, nto);
+        outputF = generateQuadFVNseq(fvnSet, nRepeat, nto);
         tmpxRef = outputF.xTestR;
         pwRef = tmpxRef .^2;
         smpwRef = sqrt(abs(fftfilt(hanning(nto*2)/sum(hanning(nto*2)), pwRef)));
@@ -31,9 +102,9 @@ if length(xRec) > fs
     end
     fftl = size(fvnSet, 1);
     comRec = fftfilt(fvnSet(end:-1:1, :), [xRec(:, 1);zeros(fftl, 1)]);
-    bufRec = zeros(size(comRec, 1) + nto * nRepat, 4);
+    bufRec = zeros(size(comRec, 1) + nto * nRepeat, 4);
     comRef = fftfilt(fvnSet(end:-1:1, :), [xRef(:, 1);zeros(fftl, 1)]);
-    bufRef = zeros(size(comRec, 1) + nto * nRepat, 4);
+    bufRef = zeros(size(comRec, 1) + nto * nRepeat, 4);
     baseIdx = 1:size(comRec, 1);
     for ii = 1:8
         kk = rem((ii - 1), 8) + 1;
